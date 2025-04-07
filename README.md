@@ -2,21 +2,18 @@
 
 Set up a Caddy server to securely authenticate and proxy requests to your local Ollama instance. It includes API key validation with keys stored in a config file.
 
-If you're interested in using `OLLAMA_API_KEY` as a local environment variable, check out my other repo: [ollama-bearer-auth](https://github.com/bartolli/ollama-bearer-auth).
-
 ## Features
 
 - **Secure API Access**: Uses Caddy and Uvicorn to enforce API key authentication, allowing only requests with valid `Bearer` token/api-key.
 - **API Key Validation**: Validates API keys from a configuration file.
 - **Flexible Interaction**: Supports all endpoints to interact with the Ollama API.
 - **Dockerized Setup**: Both Ollama and Caddy are containerized.
-- **Latest Versions**: Utilizes the latest versions of Ollama
-- **GPU Support**: Based on NVIDIA CUDA 12.5.0-runtime-ubuntu22.04, optimized for GPU-accelerated host machines.
+- **GPU Support**: Based on ollama 0.6.3 base image, optimized for GPU-accelerated host machines.
 
 ## Requirements
 
 - Docker
-- Docker Compose or Docker Buildx tool (optional)
+- Docker Compose
 - openssl (optional)
 
 ## Run the container directly with Docker
@@ -46,7 +43,7 @@ and here: [Issue 2832 Comment](https://github.com/ollama/ollama/issues/2832#issu
 Clone the repository:
 
 ```bash
-git clone https://github.com/bartolli/ollama-bearer-auth-caddy.git
+git clone https://github.com/MikiGrit/ollama-bearer-auth-caddy.git
 cd ollama-bearer-auth-caddy
 ```
 
