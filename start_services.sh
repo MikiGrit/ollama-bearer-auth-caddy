@@ -23,7 +23,7 @@ CADDY_PID=$!
 echo "$(date): Started Caddy with PID $CADDY_PID" >> "$LOG_FILE"
 
 # Start Uvicorn with FastAPI app
-uvicorn app.main:app --host 0.0.0.0 --port 9090 &
+uvx uvicorn app.main:app --host 0.0.0.0 --port 9090 &
 UVICORN_PID=$!
 echo "$(date): Started Uvicorn with PID $UVICORN_PID" >> "$LOG_FILE"
 
@@ -63,7 +63,7 @@ while true; do
         check_process $UVICORN_PID "Uvicorn"
         # Only restart if check_process hasn't exited the script
         echo "$(date): Restarting Uvicorn now" >> "$LOG_FILE"
-        uvicorn app.main:app --host 0.0.0.0 --port 9090 &
+        uvx uvicorn app.main:app --host 0.0.0.0 --port 9090 &
         UVICORN_PID=$!
     fi
     sleep 1

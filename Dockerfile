@@ -1,34 +1,37 @@
-# Stage 1: Base Image with CUDA
-FROM nvidia/cuda:12.5.0-runtime-ubuntu22.04 AS base
+# Stage 1: Base Image with ollama
+FROM docker.io/ollama/ollama:0.6.3 as base
 
-# Install dependencies including Python and Pip
+# Ensure the uv installed binary is on the `PATH`
+ENV PATH="/root/.local/bin/:$PATH"
+
+# Install dependencies
 RUN apt-get update && \
-    apt-get install -y wget jq curl netcat python3 python3-pip
+    apt-get install -y wget jq curl && \
+    apt-get clean
 
-# Install additional Python libraries needed for FastAPI
-RUN pip3 install fastapi uvicorn
+# Install Python and its libraries
+ADD https://astral.sh/uv/install.sh /uv-installer.sh
+RUN sh /uv-installer.sh && rm /uv-installer.sh
+RUN uv tool install --with fastapi uvicorn
 
 # Stage 2: Build Caddy with Plugin
-FROM caddy:2.8.4-builder AS caddy-builder
+FROM docker.io/library/caddy:2.8.4-builder AS caddy-builder
 
 RUN xcaddy build
 
 # Stage 3: Final Image
-FROM base 
+FROM base
 
 # Copy Caddy binary from the 'caddy-builder' stage
 COPY --from=caddy-builder /usr/bin/caddy /usr/bin/caddy
 
-# Install Ollama 
-RUN curl -fsSL https://ollama.com/install.sh | sh
-
-# Copy configuration files 
+# Copy configuration files
 COPY Caddy/Caddyfile /etc/caddy/Caddyfile
 COPY Caddy/valid_keys.conf /etc/caddy/valid_keys.conf
 
 ENV OLLAMA_HOST=0.0.0.0 
 
-# Expose the port 
+# Expose the port
 EXPOSE 8081
 
 # Copy the startup script

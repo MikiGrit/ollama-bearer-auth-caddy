@@ -14,4 +14,12 @@ services:
       - OLLAMA_HOST=0.0.0.0
     volumes:
       - ~/.ollama:/root/.ollama
+      - ./log:/var/log
     restart: unless-stopped
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
